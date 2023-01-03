@@ -68,7 +68,7 @@ void _createiOSSplash({
   if (imagePath != null) {
     _applyImageiOS(imagePath: imagePath, list: _iOSSplashImages);
   } else {
-    final splashImage = Image(1, 1);
+    final splashImage = Image(width: 1, height: 1);
     for (final template in _iOSSplashImages) {
       final file =
           File(_flavorHelper.iOSAssetsLaunchImageFolder + template.fileName);
@@ -422,13 +422,18 @@ void _createBackground({
   required String darkBackgroundImageDestination,
 }) {
   if (colorString != null) {
-    final background = Image(1, 1);
     final redChannel = int.parse(colorString.substring(0, 2), radix: 16);
     final greenChannel = int.parse(colorString.substring(2, 4), radix: 16);
     final blueChannel = int.parse(colorString.substring(4, 6), radix: 16);
-    background.fill(
-      0xFF000000 + (blueChannel << 16) + (greenChannel << 8) + redChannel,
-    );
+    final background = Image(
+        width: 1,
+        height: 1,
+        backgroundColor: ColorRgb8(
+            (redChannel << 16), (greenChannel << 16), (blueChannel << 16)));
+
+    // background.fill(
+    //   0xFF000000 + (blueChannel << 16) + (greenChannel << 8) + redChannel,
+    // );
     final file = File(backgroundImageDestination);
     file.createSync(recursive: true);
     file.writeAsBytesSync(encodePng(background));
@@ -442,13 +447,17 @@ void _createBackground({
   }
 
   if (darkColorString != null) {
-    final background = Image(1, 1);
     final redChannel = int.parse(darkColorString.substring(0, 2), radix: 16);
     final greenChannel = int.parse(darkColorString.substring(2, 4), radix: 16);
     final blueChannel = int.parse(darkColorString.substring(4, 6), radix: 16);
-    background.fill(
-      0xFF000000 + (blueChannel << 16) + (greenChannel << 8) + redChannel,
-    );
+    final background = Image(
+        width: 1,
+        height: 1,
+        backgroundColor:
+            ColorRgb8(redChannel, (greenChannel << 8), (blueChannel << 16)));
+    // background.fill(
+    //   0xFF000000 + (blueChannel << 16) + (greenChannel << 8) + redChannel,
+    // );
     final file = File(darkBackgroundImageDestination);
     file.createSync(recursive: true);
     file.writeAsBytesSync(encodePng(background));
